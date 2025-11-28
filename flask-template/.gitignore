@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 /.env
+/docker.env
 /.venv
 /data/
 .DS_Store

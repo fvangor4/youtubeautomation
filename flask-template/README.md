@@ -61,6 +61,29 @@ python scripts/smoke_youtube.py "openai updates" --date-range 7d --max-results 3
 
 You should see a JSON payload containing the matching videos plus the estimated quota cost for that request. If you get an authentication error, double-check the `YOUTUBE_API_KEY` value and its restrictions in Google Cloud Console.
 
+## Docker (recommended for a quick run)
+
+1) Build the image:
+```bash
+docker build -t youtube-flask .
+```
+
+2) Provide your secrets via env file (copy `docker.env.example` to `docker.env` and fill in real values):
+```bash
+YOUTUBE_API_KEY=your-real-key
+# optional
+APP_AUTH_TOKEN=choose-a-token
+DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
+```
+
+3) Run the container (maps app port 5000 to host 8000):
+```bash
+docker run --rm -p 8000:5000 --env-file docker.env youtube-flask
+```
+- Visit http://localhost:8000
+- To persist saved snapshots locally: add `-v "$(pwd)/data:/app/data"`
+- If port 8000 is busy, swap the left side of `-p` (e.g., `-p 5050:5000`).
+
 ## Tests
 
 Install the dev dependencies and run pytest:
