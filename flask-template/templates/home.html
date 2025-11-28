@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}YouTube Data Explorer{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <form id="search-form" class="search-form">
+        <label>
+            Search query
+            <input type="text" name="query" id="query" placeholder="Leave blank when exploring gaming" />
+        </label>
+        <div class="form-row">
+            <label>
+                Date range
+                <select name="dateRange" id="dateRange">
+                    {% for key, option in date_ranges.items() %}
+                    <option value="{{ key }}" {% if key == default_range %}selected{% endif %}>
+                        {{ option.label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>
+                Duration
+                <select name="duration" id="duration">
+                    {% for key, label in duration_filters.items() %}
+                    <option value="{{ key }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>
+                Max results
+                <input type="number" name="maxResults" id="maxResults" min="1" max="25" value="12" />
+            </label>
+            <label>
+                Topic
+                <select name="topic" id="topic">
+                    {% for key, info in topic_filters.items() %}
+                    <option value="{{ key }}" {% if key == default_topic %}selected{% endif %}>
+                        {{ info.label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div class="action-row">
+            <button type="submit">Search YouTube</button>
+            <button type="button" id="share-discord" disabled>Send to Discord</button>
+        </div>
+        <div class="form-row advanced-row">
+            <label>
+                Snapshot format
+                <select id="snapshotFormat">
+                    {% for key, label in snapshot_formats.items() %}
+                    <option value="{{ key }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>
+                Action token
+                <input type="password" id="appToken" placeholder="{% if token_required %}Token required for save/share{% else %}Optional token for remote use{% endif %}" />
+            </label>
+        </div>
+        <div class="action-row secondary">
+            <button type="button" id="save-snapshot" disabled>Save Snapshot to Data Folder</button>
+            <button type="button" id="clear-archive">Empty Data Folder</button>
+        </div>
+        <p class="hint">
+            Add <code>YOUTUBE_API_KEY</code> (and optional <code>DISCORD_WEBHOOK_URL</code>) to your environment before running the server.
+            Select the Gaming topic to scan across the category without typing a query.
+        </p>
+        <!-- Future idea: save the last few queries locally and let the user rerun them with a single click. -->
+    </form>
+</section>
+
+<section class="panel">
+    <div id="status" class="status"></div>
+    <div id="quota" class="quota"></div>
+    <div id="results" class="results-grid" aria-live="polite"></div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <div>
+            <h2>Snapshot Library</h2>
+            <p class="hint">Files saved under <code>data/</code> for downstream agents.</p>
+        </div>
+        <button type="button" id="refresh-snapshots">Refresh</button>
+    </div>
+    <div id="snapshot-empty" class="hint">No snapshots saved yet.</div>
+    <ul id="snapshot-list" class="snapshot-list"></ul>
+</section>
+{% endblock %}

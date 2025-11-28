@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{% block title %}YouTube Research Console{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='site.css')}}" />
+        <script defer src="{{ url_for('static', filename='main.js')}}"></script>
+    </head>
+
+    <body data-token-required="{{ 1 if token_required else 0 }}">
+        <header class="app-header">
+            <div>
+                <p class="eyebrow">Local research companion</p>
+                <h1>YouTube Data Explorer</h1>
+            </div>
+            <div class="badge">Beta</div>
+        </header>
+
+        <main class="body-content">
+            {% block content %}{% endblock %}
+        </main>
+    </body>
+</html>
